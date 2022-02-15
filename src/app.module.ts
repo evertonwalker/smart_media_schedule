@@ -4,10 +4,15 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { ScheduleMessageModule } from './file/schedule-message.module';
 
-const entities = [User];
+// Entities
+import { User } from './users/user.entity';
+import { ScheduleMessage } from './file/schedule-message.entity';
+
+
+const entities = [User, ScheduleMessage];
 
 @Module({
   imports: [
@@ -25,7 +30,8 @@ const entities = [User];
       synchronize: true,
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    ScheduleMessageModule
   ],
   controllers: [AppController],
   providers: [AppService],
