@@ -4,10 +4,13 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from 'typeorm';
   import * as bcrypt from 'bcryptjs';
+import { ScheduleMessage } from 'src/file/schedule-message.entity';
   
   @Entity()
   export class User extends BaseEntity {
@@ -27,7 +30,7 @@ import {
     @Column()
     @UpdateDateColumn()
     updatedAt: Date;
-  
+
     @BeforeInsert()
     async hashPassword() {
       this.password = await bcrypt.hash(this.password, 8);

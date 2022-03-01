@@ -1,8 +1,8 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, BadRequestException, UsePipes } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, BadRequestException, Get, Param } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
-import { ValidatorPipe } from 'src/validator-pipe';
 import { ScheduleMessageDTO } from './dto/schedule-message.dto';
+import { ScheduleMessage } from './schedule-message.entity';
 import { ScheduleMessageService } from './schedule-message.service';
 
 @Controller('upload')
@@ -34,5 +34,10 @@ export class ScheduleMessageController {
 
   }
 
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  getSchedullesFromUser(@Param('id') id: string): Promise<Array<ScheduleMessage>> {
+    return this.scheduleMessageService.getSchedullesByUser(id);
+  }
 
 }

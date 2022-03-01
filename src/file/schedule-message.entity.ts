@@ -5,6 +5,7 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
+    ManyToOne,
     OneToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
@@ -24,8 +25,7 @@ import {
     @CreateDateColumn()
     scheduleDate: Date;
 
-    @OneToOne(() => User)
-    @Column()
+    @ManyToOne(() => User)
     @JoinColumn()
     user: User;
 
