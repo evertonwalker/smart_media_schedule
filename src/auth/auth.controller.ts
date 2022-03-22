@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { AuthLoginDto } from './dto/auth-login.dto';
@@ -15,7 +15,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async test() {
-    return 'Success!';
+  @HttpCode(200)
+  async verifyToken() {
+    return { status: 'ok'};
   }
 }

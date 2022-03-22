@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 
@@ -6,6 +6,8 @@ import { User } from './user.entity';
 export class UsersService {
 
     async create(createUserDto: CreateUserDto): Promise<User> {
+
+        await this.verifyDuplicatedEmail(createUserDto.email)
 
         // Here we create the data from DTO
         const user = User.create(createUserDto);
@@ -34,6 +36,18 @@ export class UsersService {
             return user;
         } else {
             throw new NotFoundException('Dados incorretos verifique-os.');
+        }
+    }
+
+    async verifyDuplicatedEmail(email: string): Promise<void> {
+        const user = await User.findOne({
+            where: {
+                email
+            }
+        });
+
+        if (user) {
+            throw new ConflictException('E-mail já cadastrado.');
         }
     }
 
