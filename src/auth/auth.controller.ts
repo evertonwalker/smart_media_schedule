@@ -13,6 +13,12 @@ export class AuthController {
     return this.authService.login(authLoginDto);
   }
 
+  @Post('verify-email')
+  async verifyEmail(@Body() emailObj: { email: string}): Promise<boolean> {
+    return this.authService.validateEmail(emailObj);
+  }
+
+
   @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(200)

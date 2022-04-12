@@ -1,5 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { NotFoundError } from 'rxjs';
 
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -10,7 +11,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(authLoginDto: AuthLoginDto) {
     const user = await this.validateUser(authLoginDto);
@@ -22,6 +23,17 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async validateEmail(emailObjDto: { email: string }): Promise<boolean> {
+
+    const user = await this.usersService.findByEmail(emailObjDto.email);
+    
+    if (user) {
+      return true;
+    } else {
+      throw new NotFoundException('E-mail não cadastrado.');
+    }
   }
 
   async validateUser(authLoginDto: AuthLoginDto): Promise<User> {
